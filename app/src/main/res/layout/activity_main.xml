@@ -5,6 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="thi is the info instant "/>
     <com.loopeer.android.librarys.scrolltable.ScrollTableView
         android:id="@+id/scroll_table_view"
         android:layout_width="match_parent"

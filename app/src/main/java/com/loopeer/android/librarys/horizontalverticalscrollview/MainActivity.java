@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
             public void adJustSelectPaintColor(int columnIndex, int rowIndex) {
 
                 //回调当前的选中项所在的行与列
-                Log.i("Info","Column="+columnIndex+"   rowIndex="+rowIndex);
+                Log.i("Info","Column-----="+columnIndex+"   rowIndex="+rowIndex);
             }
         });
     }
@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
             //results.add(i + ":00");
             results.add("");
         }
-
-
         return results;
     }
 
