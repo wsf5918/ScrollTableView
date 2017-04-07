@@ -13,13 +13,15 @@ import java.util.ArrayList;
 public class CustomTableView extends View {
     private static final String TAG = "CustomTableView";
 
+
+
     private Paint mPaintTextNormal;
-    private Paint mPaintItemBg;
+    private Paint mPaintItemBg,mPaintItemBgDouble;
 
     private int mTextUnableColor;
     private int mTextNormalColor;
     private int mTextSelectColor;
-    private int mItemBgNormalColor;
+    private int mItemBgNormalColor,mItemBgDoubleColor;
     private int mItemBgSelectColor;
     private float mTextNormal;
 
@@ -68,6 +70,8 @@ public class CustomTableView extends View {
         mTextSelectColor =  ContextCompat.getColor(getContext(), R.color.table_text_select_color);
         mItemBgNormalColor = ContextCompat.getColor(getContext(), R.color.table_item_bg_normal_color);
         mItemBgSelectColor = ContextCompat.getColor(getContext(), R.color.table_item_bg_select_color);
+        mItemBgDoubleColor = ContextCompat.getColor(getContext(), R.color.table_content_row_double);
+
         mTextNormal = getResources().getDimension(R.dimen.table_default_text_size);
 
         mPaintTextNormal = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -77,6 +81,10 @@ public class CustomTableView extends View {
         mPaintItemBg = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaintItemBg.setColor(mItemBgNormalColor);
         mPaintItemBg.setStyle(Paint.Style.FILL);
+
+        mPaintItemBgDouble = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintItemBgDouble.setColor(mItemBgDoubleColor);
+        mPaintItemBgDouble.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -98,12 +106,19 @@ public class CustomTableView extends View {
         for (int rowIndex = 0; rowIndex < row; rowIndex++) {
             for (int columnIndex = 0; columnIndex < column; columnIndex++) {
                 adJustSelectPaintColor(columnIndex, rowIndex);
-
                 float left =  mItemWidth * columnIndex + mItemMargin * columnIndex;
                 float right = left + mItemWidth;
                 float top = mItemHeight * rowIndex + mItemMargin * (rowIndex + 1);
                 float bottom = top + mItemHeight;
-                canvas.drawRect(left, top, right, bottom, mPaintItemBg);
+
+                if (rowIndex%2==0)
+                {
+                    canvas.drawRect(left, top, right, bottom, mPaintItemBg);
+                }
+                else
+                {
+                    canvas.drawRect(left, top, right, bottom, mPaintItemBgDouble);
+                }
 
                 String content = getShowData(rowIndex, columnIndex);
                 Paint.FontMetrics fontMetrics = mPaintTextNormal.getFontMetrics();
@@ -111,7 +126,6 @@ public class CustomTableView extends View {
                 float textWidth = mPaintTextNormal.measureText(content);
                 float y = top + mItemHeight - (mItemHeight - fontHeight) / 2 - fontMetrics.bottom;
                 float x = left + mItemWidth / 2 - textWidth / 2;
-
                 canvas.drawText(content, x, y, mPaintTextNormal);
             }
         }
@@ -125,14 +139,22 @@ public class CustomTableView extends View {
         }
     }
 
+    /**
+     * 回调当前选中的行与列
+     * @param columnIndex
+     * @param rowIndex
+     */
     private void adJustSelectPaintColor(int columnIndex, int rowIndex) {
         if (selectPositions != null && selectPositions.contains(new Position(columnIndex, rowIndex))) {
             mPaintTextNormal.setColor(mTextSelectColor);
             mPaintItemBg.setColor(mItemBgSelectColor);
+
         } else {
             mPaintTextNormal.setColor(mTextNormalColor);
             mPaintItemBg.setColor(mItemBgNormalColor);
         }
+
+
     }
 
     public void setRowAndColumn(int row, int column) {
@@ -171,6 +193,8 @@ public class CustomTableView extends View {
             case MotionEvent.ACTION_UP:
                 if (mPositionChangeListener != null) {
                     mPositionChangeListener.onPositionClick(position);
+
+                    monOnSelectHandler.adJustSelectPaintColor(position.x,position.y);
                 }
                 break;
         }
@@ -246,6 +270,15 @@ public class CustomTableView extends View {
         setTextNormalColor(a.getColor(R.styleable.ScrollTableView_textNormalColor, mTextNormalColor));
         setTextSelectColor(a.getColor(R.styleable.ScrollTableView_textSelectColor, mTextSelectColor));
         setTextUnableColor(a.getColor(R.styleable.ScrollTableView_textUnableColor, mTextUnableColor));
+    }
 
+    private  IOnAdjustCallBack monOnSelectHandler;
+
+    public void setOnSelectHandlerCallback(IOnAdjustCallBack callback)
+    {
+        this.monOnSelectHandler=callback;
+    }
+    public interface  IOnAdjustCallBack{
+        void adJustSelectPaintColor(int columnIndex, int rowIndex);
     }
 }

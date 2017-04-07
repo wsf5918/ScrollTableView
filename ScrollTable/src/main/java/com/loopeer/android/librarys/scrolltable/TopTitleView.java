@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class TopTitleView extends View {
 
     private Paint mPaintTextNormal;
-    private int mTextTopTitleColor;
+    private int mTextTopTitleColor,mTitleDividColor;
     private float mTextNormal;
 
     private int mItemHeight;
@@ -52,6 +52,7 @@ public class TopTitleView extends View {
 
     private void initPaint() {
         mTextTopTitleColor = ContextCompat.getColor(getContext(), R.color.table_text_secondary_color);
+        mTitleDividColor = ContextCompat.getColor(getContext(), R.color.table_title_divide_line);
         mTextNormal = getResources().getDimension(R.dimen.table_default_title_size);
 
         mPaintTextNormal = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -79,12 +80,24 @@ public class TopTitleView extends View {
             Paint.FontMetrics fontMetrics = mPaintTextNormal.getFontMetrics();
             float fontHeight = fontMetrics.bottom - fontMetrics.top;
             float textWidth = mPaintTextNormal.measureText(content);
-            float y = mItemPlaceHeight - (mItemPlaceHeight - fontHeight) / 2 - fontMetrics.bottom;
-
+            float y = mItemPlaceHeight - (mItemPlaceHeight - fontHeight) / 2 - fontMetrics.bottom-10;
             float x = (mItemMargin + mItemWidth) * columnIndex + mItemWidth / 2 - textWidth / 2;
-
             canvas.drawText(content, x, y, mPaintTextNormal);
 
+            //开始画线
+            if (columnIndex<column-1)
+            {
+                //在后面加一小条线
+                Paint mlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                mlinePaint.setColor(mTitleDividColor);
+                mlinePaint.setTextSize(mTextNormal);
+                float startPosx=(columnIndex+1)*(mItemWidth+3);
+                float startPosy=0;
+                float endPosx=(columnIndex+1)*(mItemWidth+3);
+                float endPosy=mItemHeight;
+
+                canvas.drawLine(startPosx,startPosy,endPosx,endPosy,mlinePaint);
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
 
@@ -105,6 +106,26 @@ public class ScrollTableView extends LinearLayout implements CustomTableView.OnP
             selectPositions.add(position);
         }
         contentView.setSelectPositions(selectPositions);
+
+    }
+
+    /**
+     * 是否是显示左侧的title
+     */
+    public void hideLeftTitleDisplay() {
+        headerVertical.setVisibility(View.GONE);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) scrollHeaderHorizontal.getLayoutParams();
+        params.leftMargin = 0;
+        scrollHeaderHorizontal.setLayoutParams(params);
+    }
+
+    /**
+     * 单元格选中回调
+     * @param callb
+     */
+    public void setCellItemCollectSelected(CustomTableView.IOnAdjustCallBack callb)
+    {
+        contentView.setOnSelectHandlerCallback(callb);
     }
 
 }

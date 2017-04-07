@@ -1,15 +1,17 @@
 package com.loopeer.android.librarys.horizontalverticalscrollview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.loopeer.android.librarys.scrolltable.CustomTableView;
 import com.loopeer.android.librarys.scrolltable.ScrollTableView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String[] topTitles = new String[] {"场地一", "场地二", "场地三", "场地四", "场地五", "场地六", "场地七", "场地八", "场地九", "场地十", "场地十一"};
+    private static final String[] topTitles = new String[]{"Time", "ins&Outs", "Reason", "OrderNo"};
 
     private ScrollTableView scrollTableView;
 
@@ -22,6 +24,16 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> leftTitle = createLeftTitle();
         ArrayList<String> topTitles = createTopTitles();
         scrollTableView.setDatas(createTopTitles(), createLeftTitle(), createContent(leftTitle.size(), topTitles.size()));
+        scrollTableView.hideLeftTitleDisplay();
+
+        scrollTableView.setCellItemCollectSelected(new CustomTableView.IOnAdjustCallBack() {
+            @Override
+            public void adJustSelectPaintColor(int columnIndex, int rowIndex) {
+
+                //回调当前的选中项所在的行与列
+                Log.i("Info","Column="+columnIndex+"   rowIndex="+rowIndex);
+            }
+        });
     }
 
     private ArrayList<ArrayList<String>> createContent(int row, int column) {
@@ -47,9 +59,13 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> createLeftTitle() {
         ArrayList<String> results = new ArrayList<>();
         for (int i = 9; i < 23; i++) {
-            results.add(i + ":00");
+            //results.add(i + ":00");
+            results.add("");
         }
+
+
         return results;
     }
+
 
 }

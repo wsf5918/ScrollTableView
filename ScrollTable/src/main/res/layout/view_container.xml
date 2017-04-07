@@ -9,12 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/table_top_title_height"
         android:layout_marginLeft="@dimen/table_left_title_width"
+
         >
 
         <com.loopeer.android.librarys.scrolltable.TopTitleView
             android:id="@+id/header_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/table_title_bg_color"
+            />
 
     </com.loopeer.android.librarys.scrolltable.IHorizontalScrollView>
 
@@ -47,7 +50,6 @@
                     android:layout_height="match_parent">
 
                     <com.loopeer.android.librarys.scrolltable.CustomTableView
-                        android:layout_marginTop="@dimen/table_default_margin_top"
                         android:id="@+id/content_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
